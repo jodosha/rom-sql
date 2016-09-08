@@ -1,6 +1,6 @@
 require 'rom/sql/types/pg'
 
-RSpec.describe 'Schema inference' do
+RSpec.describe 'Schema inference', :postgres do
   include_context 'database setup'
 
   let(:schema) { container.relations[dataset].schema }
@@ -78,80 +78,6 @@ RSpec.describe 'Schema inference' do
             array2: ROM::SQL::Types::PG::Array.optional.meta(name: :array2),
             json1: ROM::SQL::Types::PG::JSON.optional.meta(name: :json1),
             json2: ROM::SQL::Types::PG::JSONB.optional.meta(name: :json2)
-          ]
-
-          expected.each do |column, definition|
-            actual = schema.attributes.fetch(column)
-            expect(actual).to eq(definition)
-          end
-        end
-      end
-    end
-
-    with_adapters(:sqlite) do
-      context 'for complex table' do
-        before do
-          conn.drop_table?(:test_inferrence)
-
-          conn.create_table :test_inferrence do
-            primary_key :id
-            String :text, null: false
-            Boolean :flag, null: false
-            Date :date
-            DateTime :datetime, null: false
-            Decimal :money, null: false
-            Bytea :data
-          end
-        end
-
-        let(:dataset) { :test_inferrence }
-
-        it 'can infer attributes for dataset' do
-          expected = Hash[
-            id: ROM::SQL::Types::Serial.meta(name: :id),
-            text: ROM::SQL::Types::Strict::String.meta(name: :text),
-            flag: ROM::SQL::Types::Strict::Bool.meta(name: :flag),
-            date: ROM::SQL::Types::Strict::Date.optional.meta(name: :date),
-            datetime: ROM::SQL::Types::Strict::Time.meta(name: :datetime),
-            money: ROM::SQL::Types::Strict::Decimal.meta(name: :money),
-            data: ROM::SQL::Types::Blob.optional.meta(name: :data)
-          ]
-
-          expected.each do |column, definition|
-            actual = schema.attributes.fetch(column)
-            expect(actual).to eq(definition)
-          end
-        end
-      end
-    end
-
-    with_adapters(:mysql) do
-      context 'for complex table' do
-        before do
-          conn.drop_table?(:test_inferrence)
-
-          conn.create_table :test_inferrence do
-            primary_key :id
-            String :text, null: false
-            Boolean :flag, null: false
-            Date :date
-            DateTime :datetime, null: false
-            Decimal :money, null: false
-            Blob :data
-          end
-        end
-
-        let(:dataset) { :test_inferrence }
-
-        it 'can infer attributes for dataset' do
-          expected = Hash[
-            id: ROM::SQL::Types::Serial.meta(name: :id),
-            text: ROM::SQL::Types::Strict::String.meta(name: :text),
-            flag: ROM::SQL::Types::Strict::Bool.meta(name: :flag),
-            date: ROM::SQL::Types::Strict::Date.optional.meta(name: :date),
-            datetime: ROM::SQL::Types::Strict::Time.meta(name: :datetime),
-            money: ROM::SQL::Types::Strict::Int.meta(name: :money),
-            # data: ROM::SQL::Types::Blob.optional.meta(name: :data)
           ]
 
           expected.each do |column, definition|
