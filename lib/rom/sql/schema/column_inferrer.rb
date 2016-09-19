@@ -29,13 +29,13 @@ module ROM
         ).freeze
 
         ruby_type_mapping(
-          integer: Types::Strict::Int,
-          string: Types::Strict::String,
-          date: Types::Strict::Date,
-          datetime: Types::Strict::Time,
-          boolean: Types::Strict::Bool,
-          decimal: Types::Strict::Decimal,
-          blob: Types::Strict::String
+          integer: ROM::SQL::Types::Int,
+          string: ROM::SQL::Types::String,
+          date: ROM::SQL::Types::Date,
+          datetime: ROM::SQL::Types::Time,
+          boolean: ROM::SQL::Types::Bool,
+          decimal: ROM::SQL::Types::Decimal,
+          blob: ROM::SQL::Types::String
         ).freeze
 
         db_array_type_matcher ']'.freeze

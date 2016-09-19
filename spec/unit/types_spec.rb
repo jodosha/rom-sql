@@ -2,25 +2,98 @@ require 'rom/sql/types'
 require 'rom/sql/types/pg'
 
 RSpec.describe ROM::SQL::Types, :postgres do
-  describe ROM::SQL::Types::Serial do
-    it 'accepts ints > 0' do
-      expect(ROM::SQL::Types::Serial[1]).to be(1)
+  describe ROM::SQL::Types::String do
+    it 'accepts nil' do
+      expect(described_class[nil]).to be(nil)
     end
 
-    it 'raises when input is <= 0' do
-      expect { ROM::SQL::Types::Serial[0] }.to raise_error(Dry::Types::ConstraintError)
+    it 'accepts string' do
+      expect(described_class['hello']).to eq('hello')
+    end
+
+    it 'accepts #to_s' do
+      input = Class.new do
+        def to_s
+          'test'
+        end
+      end.new
+
+      expect(described_class[input]).to eq('test')
+    end
+
+    it 'accepts #to_str' do
+      input = Class.new do
+        def to_str
+          'check'
+        end
+      end.new
+
+      expect(described_class[input]).to eq('check')
     end
   end
 
-  describe ROM::SQL::Types::Blob do
-    it 'coerces strings to Sequel::SQL::Blob' do
-      input = 'sutin'
-      output = described_class[input]
+  describe ROM::SQL::Types::Int do
+    it 'accepts nil' do
+      expect(described_class[nil]).to be(nil)
+    end
 
-      expect(output).to be_instance_of(Sequel::SQL::Blob)
-      expect(output).to eql('sutin')
+    it 'accepts string representation' do
+      expect(described_class['23']).to be(23)
+    end
+
+    it 'accepts int' do
+      expect(described_class[23]).to be(23)
+    end
+
+    it 'accepts float' do
+      expect(described_class[23.0]).to be(23)
+    end
+
+    it 'accepts bigdecimal' do
+      input = BigDecimal.new(23, 0)
+      expect(described_class[input]).to be(23)
+    end
+
+    it 'accepts #to_i' do
+      input = Class.new do
+        def to_i
+          15
+        end
+      end.new
+
+      expect(described_class[input]).to be(15)
+    end
+
+    it 'accepts #to_int' do
+      input = Class.new do
+        def to_int
+          23
+        end
+      end.new
+
+      expect(described_class[input]).to be(23)
     end
   end
+
+  # describe ROM::SQL::Types::Serial do
+  #   it 'accepts ints > 0' do
+  #     expect(ROM::SQL::Types::Serial[1]).to be(1)
+  #   end
+
+  #   it 'raises when input is <= 0' do
+  #     expect { ROM::SQL::Types::Serial[0] }.to raise_error(Dry::Types::ConstraintError)
+  #   end
+  # end
+
+  # describe ROM::SQL::Types::Blob do
+  #   it 'coerces strings to Sequel::SQL::Blob' do
+  #     input = 'sutin'
+  #     output = described_class[input]
+
+  #     expect(output).to be_instance_of(Sequel::SQL::Blob)
+  #     expect(output).to eql('sutin')
+  #   end
+  # end
 
   describe ROM::SQL::Types::PG::UUID do
     it 'coerces strings to UUID' do

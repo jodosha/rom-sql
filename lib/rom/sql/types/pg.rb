@@ -7,7 +7,7 @@ module ROM
       module PG
         # UUID
 
-        UUID = Types::Strict::String.constrained(format: Regexp.new('^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{2})([0-9a-f]{2})-([0-9a-f]{12})$'))
+        UUID = ROM::Types::Strict::String.constrained(format: Regexp.new('^([0-9a-f]{8})-([0-9a-f]{4})-([0-9a-f]{4})-([0-9a-f]{2})([0-9a-f]{2})-([0-9a-f]{12})$'))
 
         # Array
 
@@ -47,7 +47,7 @@ module ROM
 
         # MONEY
 
-        Money = Types::Strict::Decimal
+        Money = ROM::Types::Strict::Decimal
       end
     end
   end

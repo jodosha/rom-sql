@@ -19,7 +19,7 @@ RSpec.describe 'Schema inference', :postgres do
       it 'can infer attributes for dataset' do
         expect(schema.attributes).to eql(
           id: ROM::SQL::Types::Serial.meta(name: :id),
-          name: ROM::SQL::Types::Strict::String.meta(name: :name)
+          name: ROM::SQL::Types::String.meta(name: :name)
         )
       end
     end
@@ -30,8 +30,8 @@ RSpec.describe 'Schema inference', :postgres do
       it 'can infer attributes for dataset' do
         expect(schema.attributes).to eql(
           id: ROM::SQL::Types::Serial.meta(name: :id),
-          title: ROM::SQL::Types::Strict::String.optional.meta(name: :title),
-          user_id: ROM::SQL::Types::Strict::Int.optional.meta(name: :user_id, foreign_key: true, relation: :users)
+          title: ROM::SQL::Types::String.optional.meta(name: :title),
+          user_id: ROM::SQL::Types::Int.optional.meta(name: :user_id, foreign_key: true, relation: :users)
         )
       end
     end
@@ -66,14 +66,14 @@ RSpec.describe 'Schema inference', :postgres do
           expected = Hash[
             id: ROM::SQL::Types::PG::UUID.meta(name: :id, primary_key: true),
             uuid1: ROM::SQL::Types::PG::UUID.optional.meta(name: :uuid1),
-            price1: ROM::SQL::Types::Strict::Decimal.meta(name: :price1),
-            price2: ROM::SQL::Types::Strict::Decimal.optional.meta(name: :price2),
+            price1: ROM::SQL::Types::Decimal.meta(name: :price1),
+            price2: ROM::SQL::Types::Decimal.optional.meta(name: :price2),
             price3: ROM::SQL::Types::PG::Money.meta(name: :price3),
             price4: ROM::SQL::Types::PG::Money.optional.meta(name: :price4),
             file: ROM::SQL::Types::Blob.optional.meta(name: :file),
-            date: ROM::SQL::Types::Strict::Date.optional.meta(name: :date),
-            datetime: ROM::SQL::Types::Strict::Time.meta(name: :datetime),
-            flag: ROM::SQL::Types::Strict::Bool.meta(name: :flag),
+            date: ROM::SQL::Types::Date.optional.meta(name: :date),
+            datetime: ROM::SQL::Types::Time.meta(name: :datetime),
+            flag: ROM::SQL::Types::Bool.meta(name: :flag),
             array1: ROM::SQL::Types::PG::Array.optional.meta(name: :array1),
             array2: ROM::SQL::Types::PG::Array.optional.meta(name: :array2),
             json1: ROM::SQL::Types::PG::JSON.optional.meta(name: :json1),
