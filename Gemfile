@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gemspec
+gem 'dry-types', github: 'dry-rb/dry-types' # FIXME: remove this when dry-types 0.9 will be released
 
 group :test do
   gem 'byebug', platforms: :mri
