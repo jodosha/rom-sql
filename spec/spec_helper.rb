@@ -1,9 +1,11 @@
 require 'bundler'
 Bundler.setup
 
-if RUBY_ENGINE == 'ruby' && RUBY_VERSION == '2.3.1'
-  require 'codeclimate-test-reporter'
-  CodeClimate::TestReporter.start
+if RUBY_ENGINE == 'ruby' && ENV['CI'] == 'true'
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
 end
 
 require 'rom-sql'
@@ -46,6 +48,11 @@ require 'rom/support/deprecations'
 ROM::Deprecations.set_logger!(root.join('../log/deprecations.log'))
 
 ROM::SQL.load_extensions(:postgres)
+
+require 'dry-types'
+module Types
+  include Dry::Types.module
+end
 
 module ENVHelper
   def db?(type, example)
